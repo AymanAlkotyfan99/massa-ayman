@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>أيمن &amp; ماسة — دعوة زفاف</title>
+<meta name="description" content="يسرّنا دعوتكم لمشاركتنا فرحة زفافنا">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="script.css">
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <span class="loader-line loader-line-top"></span>
+    <div class="loader-mark">
+      <span class="loader-letter">أ</span>
+      <span class="loader-cross">&times;</span>
+      <span class="loader-letter">م</span>
+    </div>
+    <span class="loader-line loader-line-bottom"></span>
+  </div>
+</div>
+
+<!-- ============ NOISE / GRAIN OVERLAY ============ -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="hero">
+  <div class="hero-media">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/videos/poster.jpg">
+      <source src="assets/videos/wedding-bg.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-vignette"></div>
+  </div>
+
+  <div class="hero-content">
+    <span class="hero-deco" id="heroDeco" aria-hidden="true"></span>
+
+    <p class="hero-kicker" id="heroKicker">بِسْمِ اللهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+
+    <h1 class="hero-names" id="heroNames">
+      <span class="name-part">أَيْمَن</span>
+      <span class="hero-amp">×</span>
+      <span class="name-part">مَاسَة</span>
+    </h1>
+
+    <p class="hero-invite">
+      <span class="typewriter typewriter-block" id="heroTypewriter" data-text="وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"></span>
+    </p>
+    <p class="hero-ayah-source" id="heroAyahSource">صدق الله العظيم — سورة الروم، الآية ٢١</p>
+
+    <span class="hero-divider" id="heroDivider" aria-hidden="true"></span>
+
+    <a href="#invitation" class="hero-cta" id="heroCta">
+      <span>اكتشف تفاصيل الدعوة</span>
+    </a>
+  </div>
+
+  <div class="scroll-indicator" id="scrollIndicator" aria-hidden="true">
+    <span class="scroll-line"></span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ SECTION 1 — INVITATION MESSAGE ============ -->
+  <section class="section invitation-section" id="invitation">
+    <div class="section-inner">
+      <span class="deco-mark reveal" data-reveal="deco" aria-hidden="true"></span>
+
+      <h2 class="section-title reveal" data-reveal="title">دعوة من القلب</h2>
+
+      <p class="invitation-body">
+        <span class="typewriter typewriter-block" data-text="بِمَشِيئَةِ اللهِ وَتَوْفِيقِهِ،&#10;نَدْعُوكُمْ بِكُلِّ مَحَبَّةٍ&#10;لِمُشَارَكَتِنَا أَجْمَلَ لَحَظَاتِ حَيَاتِنَا،&#10;وَحُضُورِ حَفْلِ زِفَافِنَا."></span>
+      </p>
+
+      <p class="invitation-closing reveal" data-reveal="closing">لِنَصْنَعَ مَعًا ذِكْرَى لا تُنْسَى</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2 — COUPLE NAMES ============ -->
+  <section class="section couple-section" id="couple">
+    <div class="section-inner">
+      <span class="grow-line reveal" data-reveal="line" aria-hidden="true"></span>
+
+      <div class="couple-names">
+        <span class="couple-name couple-name-groom reveal" data-reveal="from-right">أَيْمَن</span>
+        <span class="couple-amp reveal" data-reveal="fade">&amp;</span>
+        <span class="couple-name couple-name-bride reveal" data-reveal="from-left">مَاسَة</span>
+      </div>
+
+      <p class="couple-tagline">
+        <span class="typewriter" data-text="بداية حكاية جديدة"></span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3 — WEDDING DETAILS ============ -->
+  <section class="section details-section" id="details">
+    <div class="section-inner">
+      <span class="section-eyebrow reveal" data-reveal="deco" aria-hidden="true"></span>
+      <h2 class="section-title reveal" data-reveal="title">تفاصيل يومنا</h2>
+
+      <div class="details-grid" id="detailsGrid">
+        <article class="detail-card reveal" data-reveal="card">
+          <svg class="detail-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
+            <rect x="8" y="10" width="32" height="30" rx="2"/>
+            <path d="M8 18h32"/>
+            <path d="M16 6v8M32 6v8"/>
+            <path d="M16 26h4M24 26h4M16 33h4"/>
+          </svg>
+          <p class="detail-label">التاريخ</p>
+          <p class="detail-value" id="detailDate" data-field="dateDisplay">—</p>
+        </article>
+
+        <article class="detail-card reveal" data-reveal="card">
+          <svg class="detail-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
+            <circle cx="24" cy="24" r="16"/>
+            <path d="M24 12v12l8 5"/>
+          </svg>
+          <p class="detail-label">اليوم</p>
+          <p class="detail-value" data-field="day">—</p>
+        </article>
+
+        <article class="detail-card reveal" data-reveal="card">
+          <svg class="detail-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
+            <circle cx="24" cy="25" r="15"/>
+            <path d="M24 16v9l7 4"/>
+            <path d="M18 6h12"/>
+          </svg>
+          <p class="detail-label">الوقت</p>
+          <p class="detail-value" data-field="time">—</p>
+        </article>
+
+        <article class="detail-card reveal" data-reveal="card">
+          <svg class="detail-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
+            <path d="M24 6c-8 0-14 6.2-14 14 0 10.5 14 22 14 22s14-11.5 14-22c0-7.8-6-14-14-14z"/>
+            <circle cx="24" cy="20" r="5"/>
+          </svg>
+          <p class="detail-label">المكان</p>
+          <p class="detail-value" data-field="venue">—</p>
+        </article>
+
+        <article class="detail-card reveal" data-reveal="card">
+          <svg class="detail-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
+            <path d="M6 14l12-5 12 5 12-5v25l-12 5-12-5-12 5z"/>
+            <path d="M18 9v25M30 14v25"/>
+          </svg>
+          <p class="detail-label">العنوان</p>
+          <p class="detail-value" data-field="address">—</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4 — COUNTDOWN ============ -->
+  <section class="section countdown-section" id="countdown">
+    <div class="section-inner">
+      <h2 class="section-title reveal" data-reveal="title">العد التنازلي ليوم الفرح</h2>
+
+      <div class="countdown-grid" id="countdownGrid">
+        <div class="countdown-box reveal" data-reveal="card">
+          <span class="countdown-number" id="cd-days">00</span>
+          <span class="countdown-label">أيام</span>
+        </div>
+        <div class="countdown-box reveal" data-reveal="card">
+          <span class="countdown-number" id="cd-hours">00</span>
+          <span class="countdown-label">ساعات</span>
+        </div>
+        <div class="countdown-box reveal" data-reveal="card">
+          <span class="countdown-number" id="cd-minutes">00</span>
+          <span class="countdown-label">دقائق</span>
+        </div>
+        <div class="countdown-box reveal" data-reveal="card">
+          <span class="countdown-number" id="cd-seconds">00</span>
+          <span class="countdown-label">ثوانٍ</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5 — CINEMATIC QUOTE ============ -->
+  <section class="section quote-section" id="quote">
+    <div class="section-inner">
+      <p class="quote-text">
+        <span class="typewriter typewriter-block" data-text="وَمِنْ بَيْنِ كُلِّ الحِكَايَاتِ،&#10;اخْتَرْنَا أَنْ تَبْدَأَ حِكَايَتُنَا مَعًا."></span>
+      </p>
+      <span class="quote-heart reveal" data-reveal="deco" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 20s-7-4.6-9.8-9C.3 8 1.4 4.5 4.7 3.6 7 3 9.6 4 12 7c2.4-3 5-4 7.3-3.4 3.3.9 4.4 4.4 2.5 7.4C19 15.4 12 20 12 20z"/></svg>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 6 — STORY TIMELINE ============ -->
+  <section class="section timeline-section" id="timeline">
+    <div class="section-inner">
+      <h2 class="section-title reveal" data-reveal="title">حكايتنا</h2>
+
+      <div class="timeline" id="timelineList">
+        <div class="timeline-track" aria-hidden="true"><span class="timeline-track-fill" id="timelineFill"></span></div>
+
+        <div class="timeline-point reveal" data-reveal="card">
+          <span class="timeline-index">26-2-2022</span>
+          <span class="timeline-label">البداية</span>
+        </div>
+        <div class="timeline-point reveal" data-reveal="card">
+          <span class="timeline-index">27-12-2023</span>
+          <span class="timeline-label">الوعد</span>
+        </div>
+        <div class="timeline-point reveal" data-reveal="card">
+          <span class="timeline-index">20-9-2026</span>
+          <span class="timeline-label">يوم الفرح</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 7 — LOCATION ============ -->
+  <section class="section location-section" id="location">
+    <div class="section-inner">
+      <h2 class="section-title reveal" data-reveal="title">نلتقي هنا</h2>
+      <p class="location-venue reveal" data-reveal="subtitle" data-field="venue">—</p>
+      <p class="location-address reveal" data-reveal="closing" data-field="address">—</p>
+
+      <a href="#" id="mapLink" target="_blank" rel="noopener" class="glass-btn reveal" data-reveal="card">
+        <svg class="glass-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M12 21s-7-6.1-7-11.5A7 7 0 0119 9.5C19 14.9 12 21 12 21z"/>
+          <circle cx="12" cy="9.5" r="2.3"/>
+        </svg>
+        <span>عرض الموقع على الخريطة</span>
+        <svg class="glass-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M17 7L7 17M17 7H9M17 7v8"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 8 — RSVP ============ -->
+  <section class="section rsvp-section" id="rsvp">
+    <div class="section-inner">
+      <h2 class="section-title reveal" data-reveal="title">وجودكم يجعل فرحتنا أجمل</h2>
+
+      <p class="rsvp-body">
+        <span class="typewriter" data-text="نتمنى أن تشاركونا هذه الليلة المميزة"></span>
+      </p>
+
+      <a href="#" id="rsvpLink" target="_blank" rel="noopener" class="glass-btn glass-btn-gold reveal" data-reveal="card">
+        <svg class="glass-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M20 11.5a8.4 8.4 0 01-12.6 7.3L4 20l1.2-3.3A8.4 8.4 0 1120 11.5z"/>
+        </svg>
+        <span>تأكيد الحضور</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ FINAL SECTION ============ -->
+  <section class="section final-section" id="final">
+    <div class="section-inner">
+      <p class="final-line">
+        <span class="typewriter typewriter-block" data-text="حُضُورُكُمْ يَكْتَمِلُ بِهِ الْفَرَحُ"></span>
+      </p>
+
+      <p class="final-sub reveal" data-reveal="subtitle">ننتظركم لنشارك معًا أجمل اللحظات</p>
+
+      <div class="final-names reveal" data-reveal="names">
+        <span>أَيْمَن</span>
+        <span class="final-amp">&amp;</span>
+        <span>مَاسَة</span>
+      </div>
+
+      <p class="final-date reveal" data-reveal="closing" data-field="dateDisplay">—</p>
+
+      <span class="final-deco reveal" data-reveal="deco" aria-hidden="true"></span>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
