@@ -22,11 +22,28 @@
     whatsapp: "0949330851"
   };
 
-  // Add your photos to assets/images as: image 1.jpg, image 2.png, etc.
-  // Up to six images are detected automatically in the supported formats below.
-  const galleryImageNames = [
-    "image 1", "image 2", "image 3",
-    "image 4", "image 5", "image 6"
+  // Each caption is paired with the photo that has the same number.
+  const galleryItems = [
+    {
+      name: "image 1",
+      caption: "الحمدلله الذي بنعمته تتم الصالحات، البداية كانت حُلماً، واليوم أصبح واقعاً يجمعنا"
+    },
+    {
+      name: "image 2",
+      caption: "بين نموّ الحلم واكتمال النصيب، يسعدنا أن تشاركونا فرحة العمر"
+    },
+    {
+      name: "image 3",
+      caption: "الحمدلله الذي جعل نهاية الصبر جبراً، وجمعنا معاً في حلاله"
+    },
+    {
+      name: "image 4",
+      caption: "وشاءَ الله أن يجمعنا بالنصيب، ليُصبح حلم العمر حقيقة نعيشها معاً"
+    },
+    {
+      name: "image 5",
+      caption: "الحمدلله الذي توّج الصبر بجميل اللقاء، وجعلنا لبعضنا نصيباً وعمراً."
+    }
   ];
   const galleryImageExtensions = ["jpg", "jpeg", "png", "webp"];
 
@@ -265,7 +282,7 @@
           seen.add(entry.target);
           runSectionSequence(entry.target);
 
-          // extra: timeline fill line & couple grow-line get special treatment
+          // The timeline fill line gets its own delayed drawing animation.
           if (entry.target.id === 'timeline') {
             const fill = $('#timelineFill');
             if (fill) setTimeout(() => { fill.style.width = '100%'; }, 900);
@@ -324,7 +341,7 @@
   /* ---------------------------------------------------------
      7. COUPLE PHOTO GALLERY
      --------------------------------------------------------- */
-  function findGalleryImage(name) {
+  function findGalleryImage(item) {
     return new Promise((resolve) => {
       let extensionIndex = 0;
 
@@ -335,9 +352,9 @@
         }
 
         const extension = galleryImageExtensions[extensionIndex++];
-        const src = `assets/images/${name}.${extension}`;
+        const src = `assets/images/${item.name}.${extension}`;
         const probe = new Image();
-        probe.onload = () => resolve({ src, name });
+        probe.onload = () => resolve({ ...item, src });
         probe.onerror = tryNextExtension;
         probe.src = src;
       }
@@ -349,15 +366,18 @@
   async function initGallery() {
     const gallery = $('#photoGallery');
     const image = $('#galleryImage');
+    const captionLayer = $('#galleryCaptionLayer');
+    const caption = $('#galleryCaption');
+    const captionLive = $('#galleryCaptionLive');
     const placeholder = $('#galleryPlaceholder');
     const prevButton = $('#galleryPrev');
     const nextButton = $('#galleryNext');
     const status = $('#galleryStatus');
 
-    if (!gallery || !image || !prevButton || !nextButton) return;
+    if (!gallery || !image || !captionLayer || !caption || !prevButton || !nextButton) return;
     if (status) status.textContent = 'جاري تحميل الصور…';
 
-    const discovered = await Promise.all(galleryImageNames.map(findGalleryImage));
+    const discovered = await Promise.all(galleryItems.map(findGalleryImage));
     const images = discovered.filter(Boolean);
 
     if (!images.length) {
@@ -371,21 +391,82 @@
 
     if (placeholder) placeholder.hidden = true;
     image.hidden = false;
+    captionLayer.hidden = false;
     prevButton.disabled = !hasMultipleImages;
     nextButton.disabled = !hasMultipleImages;
     gallery.classList.toggle('has-single-image', !hasMultipleImages);
 
     let isTransitioning = false;
+    let captionsAreActive = false;
+    let captionTimer = null;
+    let captionRunId = 0;
     const fadeOutDelay = prefersReducedMotion ? 0 : 260;
     const fadeInDuration = prefersReducedMotion ? 0 : 380;
 
+    function stopCaptionTyping() {
+      captionRunId++;
+      clearTimeout(captionTimer);
+      captionTimer = null;
+      caption.classList.remove('is-typing');
+    }
+
+    function typeGalleryCaption(text, announcement) {
+      stopCaptionTyping();
+      const activeRunId = captionRunId;
+      caption.textContent = '';
+      if (captionLive) captionLive.textContent = announcement;
+
+      if (prefersReducedMotion) {
+        caption.textContent = text;
+        return;
+      }
+
+      const characters = typeof Intl.Segmenter === 'function'
+        ? Array.from(
+            new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(text),
+            (part) => part.segment
+          )
+        : Array.from(text);
+      let characterIndex = 0;
+      caption.classList.add('is-typing');
+
+      function typeNextCharacter() {
+        if (activeRunId !== captionRunId) return;
+
+        if (characterIndex >= characters.length) {
+          caption.classList.remove('is-typing');
+          return;
+        }
+
+        const character = characters[characterIndex++];
+        caption.textContent += character;
+
+        let delay = 58;
+        if (character === '،' || character === ',') delay = 240;
+        else if (character === '.' || character === '؛') delay = 340;
+
+        captionTimer = setTimeout(typeNextCharacter, delay);
+      }
+
+      typeNextCharacter();
+    }
+
+    function renderCaption(current) {
+      const imagePosition = formatNumber(currentIndex + 1);
+      const imageTotal = formatNumber(images.length);
+      typeGalleryCaption(current.caption, `الصورة ${imagePosition} من ${imageTotal}: ${current.caption}`);
+    }
+
     function renderImage() {
       const current = images[currentIndex];
+      const imagePosition = formatNumber(currentIndex + 1);
+      const imageTotal = formatNumber(images.length);
       image.src = current.src;
-      image.alt = `صورة للمهندس أيمن والمهندسة ماسة رقم ${formatNumber(currentIndex + 1)}`;
+      image.alt = `صورة للمهندس أيمن والمهندسة ماسة رقم ${imagePosition}`;
+      if (captionsAreActive) renderCaption(current);
 
       if (status) {
-        status.textContent = `الصورة ${formatNumber(currentIndex + 1)} من ${formatNumber(images.length)}`;
+        status.textContent = `الصورة ${imagePosition} من ${imageTotal}`;
       }
 
     }
@@ -394,6 +475,8 @@
       if (!hasMultipleImages || isTransitioning) return;
       isTransitioning = true;
       image.classList.add('is-changing');
+      captionLayer.classList.add('is-changing');
+      stopCaptionTyping();
 
       setTimeout(() => {
         currentIndex = (currentIndex + step + images.length) % images.length;
@@ -401,6 +484,7 @@
 
         requestAnimationFrame(() => {
           image.classList.remove('is-changing');
+          captionLayer.classList.remove('is-changing');
           setTimeout(() => { isTransitioning = false; }, fadeInDuration);
         });
       }, fadeOutDelay);
@@ -430,6 +514,21 @@
       if (Math.abs(distance) < 45) return;
       moveGallery(distance < 0 ? 1 : -1);
     }, { passive: true });
+
+    if ('IntersectionObserver' in window) {
+      const captionObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        captionObserver.disconnect();
+
+        setTimeout(() => {
+          captionsAreActive = true;
+          renderCaption(images[currentIndex]);
+        }, prefersReducedMotion ? 0 : 480);
+      }, { threshold: .35 });
+      captionObserver.observe(gallery);
+    } else {
+      captionsAreActive = true;
+    }
 
     renderImage();
   }

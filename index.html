@@ -85,20 +85,22 @@
     </div>
   </section>
 
-  <!-- ============ SECTION 2 — COUPLE NAMES ============ -->
+  <!-- ============ SECTION 2 — COUPLE LOGO ============ -->
   <section class="section couple-section" id="couple">
     <div class="section-inner">
-      <span class="grow-line reveal" data-reveal="line" aria-hidden="true"></span>
+      <div class="logo-showcase reveal" data-reveal="logo">
+        <span class="logo-aura" aria-hidden="true"></span>
+        <span class="logo-orbit logo-orbit-one" aria-hidden="true"></span>
+        <span class="logo-orbit logo-orbit-two" aria-hidden="true"></span>
+        <span class="logo-spark logo-spark-one" aria-hidden="true"></span>
+        <span class="logo-spark logo-spark-two" aria-hidden="true"></span>
+        <span class="logo-spark logo-spark-three" aria-hidden="true"></span>
 
-      <div class="couple-names">
-        <span class="couple-name couple-name-groom reveal" data-reveal="from-right" data-field="groom">المهندس أيمن</span>
-        <span class="couple-amp reveal" data-reveal="fade">&amp;</span>
-        <span class="couple-name couple-name-bride reveal" data-reveal="from-left" data-field="bride">المهندسة ماسة</span>
+        <div class="logo-crop">
+          <img class="engagement-logo" src="assets/Logo/Logo.png"
+               alt="شعار المهندس أيمن والمهندسة ماسة" decoding="async">
+        </div>
       </div>
-
-      <p class="couple-tagline">
-        <span class="typewriter" data-text="بداية حكاية جديدة"></span>
-      </p>
     </div>
   </section>
 
@@ -197,6 +199,9 @@
            role="region" aria-roledescription="carousel" aria-label="صور العروسين" tabindex="0">
         <div class="gallery-stage">
           <img class="gallery-image" id="galleryImage" alt="" hidden>
+          <div class="gallery-caption-layer" id="galleryCaptionLayer" hidden>
+            <p class="gallery-caption" id="galleryCaption" aria-hidden="true"></p>
+          </div>
           <div class="gallery-placeholder" id="galleryPlaceholder">
             <span class="gallery-placeholder-title">صورنا معًا</span>
             <span class="gallery-placeholder-help">ضع الصور داخل مجلد assets/images باسم image 1 وهكذا</span>
@@ -208,7 +213,8 @@
         <button class="gallery-arrow gallery-arrow-left" id="galleryPrev" type="button"
                 aria-label="الصورة السابقة" disabled>&lsaquo;</button>
 
-        <p class="gallery-status" id="galleryStatus" aria-live="polite">بانتظار إضافة الصور</p>
+        <p class="gallery-status" id="galleryStatus">بانتظار إضافة الصور</p>
+        <p class="sr-only" id="galleryCaptionLive" role="status" aria-live="polite" aria-atomic="true"></p>
       </div>
     </div>
   </section>

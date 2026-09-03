@@ -4,5 +4,5 @@ image 1.jpg
 image 2.jpg
 image 3.jpg
 
-يمكنك إضافة صور حتى image 6، كما يمكنك استخدام امتداد jpg أو jpeg أو png أو webp.
+المعرض مجهز للصور من image 1 حتى image 5، ويمكنك استخدام امتداد jpg أو jpeg أو png أو webp.
 يجب كتابة الاسم بالأحرف الصغيرة وبمسافة بين كلمة image والرقم.
