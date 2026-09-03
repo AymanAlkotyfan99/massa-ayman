@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>أيمن &amp; ماسة — دعوة زفاف</title>
-<meta name="description" content="يسرّنا دعوتكم لمشاركتنا فرحة زفافنا">
+<title>المهندس أيمن &amp; المهندسة ماسة — دعوة خطوبة</title>
+<meta name="description" content="يسرّنا دعوتكم لمشاركتنا فرحة خطوبتنا">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,9 +46,9 @@
     <p class="hero-kicker" id="heroKicker">بِسْمِ اللهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
 
     <h1 class="hero-names" id="heroNames">
-      <span class="name-part">أَيْمَن</span>
+      <span class="name-part" data-field="groom">المهندس أيمن</span>
       <span class="hero-amp">×</span>
-      <span class="name-part">مَاسَة</span>
+      <span class="name-part" data-field="bride">المهندسة ماسة</span>
     </h1>
 
     <p class="hero-invite">
@@ -78,7 +78,7 @@
       <h2 class="section-title reveal" data-reveal="title">دعوة من القلب</h2>
 
       <p class="invitation-body">
-        <span class="typewriter typewriter-block" data-text="بِمَشِيئَةِ اللهِ وَتَوْفِيقِهِ،&#10;نَدْعُوكُمْ بِكُلِّ مَحَبَّةٍ&#10;لِمُشَارَكَتِنَا أَجْمَلَ لَحَظَاتِ حَيَاتِنَا،&#10;وَحُضُورِ حَفْلِ زِفَافِنَا."></span>
+        <span class="typewriter typewriter-block" data-text="بِمَشِيئَةِ اللهِ وَتَوْفِيقِهِ،&#10;نَدْعُوكُمْ بِكُلِّ مَحَبَّةٍ&#10;لِمُشَارَكَتِنَا أَجْمَلَ لَحَظَاتِ حَيَاتِنَا،&#10;وَحُضُورِ حَفْلِ خِطُوبَتِنَا."></span>
       </p>
 
       <p class="invitation-closing reveal" data-reveal="closing">لِنَصْنَعَ مَعًا ذِكْرَى لا تُنْسَى</p>
@@ -91,9 +91,9 @@
       <span class="grow-line reveal" data-reveal="line" aria-hidden="true"></span>
 
       <div class="couple-names">
-        <span class="couple-name couple-name-groom reveal" data-reveal="from-right">أَيْمَن</span>
+        <span class="couple-name couple-name-groom reveal" data-reveal="from-right" data-field="groom">المهندس أيمن</span>
         <span class="couple-amp reveal" data-reveal="fade">&amp;</span>
-        <span class="couple-name couple-name-bride reveal" data-reveal="from-left">مَاسَة</span>
+        <span class="couple-name couple-name-bride reveal" data-reveal="from-left" data-field="bride">المهندسة ماسة</span>
       </div>
 
       <p class="couple-tagline">
@@ -163,7 +163,7 @@
   <!-- ============ SECTION 4 — COUNTDOWN ============ -->
   <section class="section countdown-section" id="countdown">
     <div class="section-inner">
-      <h2 class="section-title reveal" data-reveal="title">العد التنازلي ليوم الفرح</h2>
+      <h2 class="section-title reveal" data-reveal="title">العد التنازلي ليوم الخطوبة</h2>
 
       <div class="countdown-grid" id="countdownGrid">
         <div class="countdown-box reveal" data-reveal="card">
@@ -186,15 +186,30 @@
     </div>
   </section>
 
-  <!-- ============ SECTION 5 — CINEMATIC QUOTE ============ -->
+  <!-- ============ SECTION 5 — QUOTE & PHOTO GALLERY ============ -->
   <section class="section quote-section" id="quote">
     <div class="section-inner">
       <p class="quote-text">
         <span class="typewriter typewriter-block" data-text="وَمِنْ بَيْنِ كُلِّ الحِكَايَاتِ،&#10;اخْتَرْنَا أَنْ تَبْدَأَ حِكَايَتُنَا مَعًا."></span>
       </p>
-      <span class="quote-heart reveal" data-reveal="deco" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 20s-7-4.6-9.8-9C.3 8 1.4 4.5 4.7 3.6 7 3 9.6 4 12 7c2.4-3 5-4 7.3-3.4 3.3.9 4.4 4.4 2.5 7.4C19 15.4 12 20 12 20z"/></svg>
-      </span>
+
+      <div class="couple-gallery reveal" id="photoGallery" data-reveal="card"
+           role="region" aria-roledescription="carousel" aria-label="صور العروسين" tabindex="0">
+        <div class="gallery-stage">
+          <img class="gallery-image" id="galleryImage" alt="" hidden>
+          <div class="gallery-placeholder" id="galleryPlaceholder">
+            <span class="gallery-placeholder-title">صورنا معًا</span>
+            <span class="gallery-placeholder-help">ضع الصور داخل مجلد assets/images باسم image 1 وهكذا</span>
+          </div>
+        </div>
+
+        <button class="gallery-arrow gallery-arrow-right" id="galleryNext" type="button"
+                aria-label="الصورة التالية" disabled>&rsaquo;</button>
+        <button class="gallery-arrow gallery-arrow-left" id="galleryPrev" type="button"
+                aria-label="الصورة السابقة" disabled>&lsaquo;</button>
+
+        <p class="gallery-status" id="galleryStatus" aria-live="polite">بانتظار إضافة الصور</p>
+      </div>
     </div>
   </section>
 
@@ -207,16 +222,16 @@
         <div class="timeline-track" aria-hidden="true"><span class="timeline-track-fill" id="timelineFill"></span></div>
 
         <div class="timeline-point reveal" data-reveal="card">
-          <span class="timeline-index">26-2-2022</span>
-          <span class="timeline-label">البداية</span>
+          <span class="timeline-index">08-08-2026</span>
+          <span class="timeline-label">الخطبة</span>
         </div>
         <div class="timeline-point reveal" data-reveal="card">
-          <span class="timeline-index">27-12-2023</span>
-          <span class="timeline-label">الوعد</span>
+          <span class="timeline-index">18-09-2026</span>
+          <span class="timeline-label">كتب الكتاب</span>
         </div>
         <div class="timeline-point reveal" data-reveal="card">
           <span class="timeline-index">20-9-2026</span>
-          <span class="timeline-label">يوم الفرح</span>
+          <span class="timeline-label">حفلتنا</span>
         </div>
       </div>
     </div>
@@ -270,9 +285,9 @@
       <p class="final-sub reveal" data-reveal="subtitle">ننتظركم لنشارك معًا أجمل اللحظات</p>
 
       <div class="final-names reveal" data-reveal="names">
-        <span>أَيْمَن</span>
+        <span data-field="groom">المهندس أيمن</span>
         <span class="final-amp">&amp;</span>
-        <span>مَاسَة</span>
+        <span data-field="bride">المهندسة ماسة</span>
       </div>
 
       <p class="final-date reveal" data-reveal="closing" data-field="dateDisplay">—</p>

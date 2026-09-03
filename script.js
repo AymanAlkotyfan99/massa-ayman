@@ -10,8 +10,8 @@
      0. EDITABLE WEDDING DATA
      --------------------------------------------------------- */
   const wedding = {
-    groom: "أيمن",
-    bride: "ماسة",
+    groom: "المهندس أيمن",
+    bride: "المهندسة ماسة",
     date: "2026-09-20", // YYYY-MM-DD — used by countdown & date display
     day: "الأحد",
     time: "16:00",
@@ -21,6 +21,14 @@
     mapsUrl: "https://maps.app.goo.gl/wzRsoxYNZk2EFQvQA",
     whatsapp: "0949330851"
   };
+
+  // Add your photos to assets/images as: image 1.jpg, image 2.png, etc.
+  // Up to six images are detected automatically in the supported formats below.
+  const galleryImageNames = [
+    "image 1", "image 2", "image 3",
+    "image 4", "image 5", "image 6"
+  ];
+  const galleryImageExtensions = ["jpg", "jpeg", "png", "webp"];
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -59,7 +67,7 @@
 
     const rsvpLink = $('#rsvpLink');
     if (rsvpLink) {
-      const msg = encodeURIComponent(`نتشرف بحضوركم حفل زفاف ${wedding.groom} و${wedding.bride}`);
+      const msg = encodeURIComponent(`نتشرف بحضوركم حفل خطوبة ${wedding.groom} و${wedding.bride}`);
       rsvpLink.href = `https://wa.me/${wedding.whatsapp}?text=${msg}`;
     }
   }
@@ -314,35 +322,150 @@
   }
 
   /* ---------------------------------------------------------
-     7. SUBTLE FLOATING PARTICLES
+     7. COUPLE PHOTO GALLERY
      --------------------------------------------------------- */
-  function initParticles() {
+  function findGalleryImage(name) {
+    return new Promise((resolve) => {
+      let extensionIndex = 0;
+
+      function tryNextExtension() {
+        if (extensionIndex >= galleryImageExtensions.length) {
+          resolve(null);
+          return;
+        }
+
+        const extension = galleryImageExtensions[extensionIndex++];
+        const src = `assets/images/${name}.${extension}`;
+        const probe = new Image();
+        probe.onload = () => resolve({ src, name });
+        probe.onerror = tryNextExtension;
+        probe.src = src;
+      }
+
+      tryNextExtension();
+    });
+  }
+
+  async function initGallery() {
+    const gallery = $('#photoGallery');
+    const image = $('#galleryImage');
+    const placeholder = $('#galleryPlaceholder');
+    const prevButton = $('#galleryPrev');
+    const nextButton = $('#galleryNext');
+    const status = $('#galleryStatus');
+
+    if (!gallery || !image || !prevButton || !nextButton) return;
+    if (status) status.textContent = 'جاري تحميل الصور…';
+
+    const discovered = await Promise.all(galleryImageNames.map(findGalleryImage));
+    const images = discovered.filter(Boolean);
+
+    if (!images.length) {
+      if (status) status.textContent = 'بانتظار إضافة الصور';
+      return;
+    }
+
+    let currentIndex = 0;
+    const formatNumber = (value) => new Intl.NumberFormat('ar').format(value);
+    const hasMultipleImages = images.length > 1;
+
+    if (placeholder) placeholder.hidden = true;
+    image.hidden = false;
+    prevButton.disabled = !hasMultipleImages;
+    nextButton.disabled = !hasMultipleImages;
+    gallery.classList.toggle('has-single-image', !hasMultipleImages);
+
+    let isTransitioning = false;
+    const fadeOutDelay = prefersReducedMotion ? 0 : 260;
+    const fadeInDuration = prefersReducedMotion ? 0 : 380;
+
+    function renderImage() {
+      const current = images[currentIndex];
+      image.src = current.src;
+      image.alt = `صورة للمهندس أيمن والمهندسة ماسة رقم ${formatNumber(currentIndex + 1)}`;
+
+      if (status) {
+        status.textContent = `الصورة ${formatNumber(currentIndex + 1)} من ${formatNumber(images.length)}`;
+      }
+
+    }
+
+    function moveGallery(step) {
+      if (!hasMultipleImages || isTransitioning) return;
+      isTransitioning = true;
+      image.classList.add('is-changing');
+
+      setTimeout(() => {
+        currentIndex = (currentIndex + step + images.length) % images.length;
+        renderImage();
+
+        requestAnimationFrame(() => {
+          image.classList.remove('is-changing');
+          setTimeout(() => { isTransitioning = false; }, fadeInDuration);
+        });
+      }, fadeOutDelay);
+    }
+
+    nextButton.addEventListener('click', () => moveGallery(1));
+    prevButton.addEventListener('click', () => moveGallery(-1));
+
+    gallery.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        moveGallery(1);
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        moveGallery(-1);
+      }
+    });
+
+    let touchStartX = null;
+    gallery.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+    gallery.addEventListener('touchend', (event) => {
+      if (touchStartX === null) return;
+      const distance = event.changedTouches[0].clientX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(distance) < 45) return;
+      moveGallery(distance < 0 ? 1 : -1);
+    }, { passive: true });
+
+    renderImage();
+  }
+
+  /* ---------------------------------------------------------
+     8. CONTINUOUS FALLING FLOWERS
+     --------------------------------------------------------- */
+  function initFlowers() {
     if (prefersReducedMotion) return;
     const isSmallScreen = window.innerWidth < 640;
-    const count = isSmallScreen ? 6 : 14;
+    const count = isSmallScreen ? 10 : 20;
+    const flowerSymbols = ['🌹', '🌸'];
 
     const field = document.createElement('div');
-    field.className = 'particle-field';
+    field.className = 'flower-field';
     field.setAttribute('aria-hidden', 'true');
 
     for (let i = 0; i < count; i++) {
-      const p = document.createElement('span');
-      p.className = 'particle';
-      const size = 2 + Math.random() * 3;
-      p.style.width = `${size}px`;
-      p.style.height = `${size}px`;
-      p.style.left = `${Math.random() * 100}%`;
-      p.style.bottom = `-${Math.random() * 20}px`;
-      p.style.animationDuration = `${18 + Math.random() * 16}s`;
-      p.style.animationDelay = `${Math.random() * 20}s`;
-      field.appendChild(p);
+      const flower = document.createElement('span');
+      const duration = 10 + Math.random() * 9;
+      flower.className = 'falling-flower';
+      flower.textContent = flowerSymbols[i % flowerSymbols.length];
+      flower.style.left = `${Math.random() * 100}%`;
+      flower.style.fontSize = `${15 + Math.random() * 13}px`;
+      flower.style.animationDuration = `${duration}s`;
+      flower.style.animationDelay = `${-Math.random() * duration}s`;
+      flower.style.setProperty('--flower-drift', `${-70 + Math.random() * 140}px`);
+      flower.style.setProperty('--flower-spin', Math.random() > .5 ? '360deg' : '-360deg');
+      field.appendChild(flower);
     }
 
     document.body.appendChild(field);
   }
 
   /* ---------------------------------------------------------
-     8. SMOOTH SCROLL FOR IN-PAGE LINKS
+     9. SMOOTH SCROLL FOR IN-PAGE LINKS
      --------------------------------------------------------- */
   function initSmoothScroll() {
     $$('a[href^="#"]').forEach((a) => {
@@ -358,7 +481,7 @@
   }
 
   /* ---------------------------------------------------------
-     9. HERO VIDEO — SLOW PLAYBACK + PAUSE WHEN TAB HIDDEN
+     10. HERO VIDEO — SLOW PLAYBACK + PAUSE WHEN TAB HIDDEN
      --------------------------------------------------------- */
   // The clip is short (~5s), so we slow it down to feel deliberate
   // and cinematic rather than looping quickly. Lower = slower.
@@ -391,7 +514,8 @@
     initSmoothScroll();
     initVideoPerf();
     initCountdown();
-    initParticles();
+    initGallery();
+    initFlowers();
     initScrollReveals();
 
     await initLoader();
