@@ -580,7 +580,84 @@
   }
 
   /* ---------------------------------------------------------
-     10. HERO VIDEO — SLOW PLAYBACK + PAUSE WHEN TAB HIDDEN
+     10. HIDDEN BACKGROUND MUSIC
+     --------------------------------------------------------- */
+  function initBackgroundAudio() {
+    const audio = $('#backgroundAudio');
+    if (!audio) return;
+
+    audio.loop = true;
+    audio.volume = 0.72;
+
+    const interactionEvents = [
+      'pointerdown', 'pointerup',
+      'touchstart', 'touchend',
+      'click', 'keydown'
+    ];
+    let sectionRetryObserver = null;
+    let passiveRetryUsed = false;
+
+    function removeStartListeners() {
+      interactionEvents.forEach((eventName) => {
+        document.removeEventListener(eventName, tryStartAudio, true);
+      });
+      window.removeEventListener('scroll', tryPassiveStart, true);
+      document.removeEventListener('wheel', tryPassiveStart, true);
+      if (sectionRetryObserver) sectionRetryObserver.disconnect();
+    }
+
+    function tryStartAudio() {
+      if (!audio.paused) {
+        removeStartListeners();
+        return;
+      }
+
+      const playAttempt = audio.play();
+      if (playAttempt && typeof playAttempt.then === 'function') {
+        playAttempt.then(removeStartListeners).catch(() => {
+          // Browsers may require a real user gesture before allowing sound.
+        });
+      }
+    }
+
+    function tryPassiveStart() {
+      if (passiveRetryUsed) return;
+      passiveRetryUsed = true;
+      tryStartAudio();
+    }
+
+    interactionEvents.forEach((eventName) => {
+      document.addEventListener(eventName, tryStartAudio, {
+        capture: true,
+        passive: eventName !== 'keydown'
+      });
+    });
+
+    // A swipe ends with touchend/pointerup, which can unlock audio on mobile.
+    // Scroll and section visibility are also retried as a best effort, although
+    // browsers may still require a tap or another explicit user gesture.
+    window.addEventListener('scroll', tryPassiveStart, { capture: true, passive: true });
+    document.addEventListener('wheel', tryPassiveStart, { capture: true, passive: true });
+
+    if ('IntersectionObserver' in window) {
+      const retryTargets = [$('#invitation'), $('#couple')].filter(Boolean);
+      sectionRetryObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          tryStartAudio();
+          sectionRetryObserver.unobserve(entry.target);
+        });
+      }, { threshold: .3 });
+      retryTargets.forEach((target) => sectionRetryObserver.observe(target));
+    }
+
+    audio.addEventListener('play', removeStartListeners, { once: true });
+
+    tryStartAudio();
+  }
+
+  /* ---------------------------------------------------------
+     11. HERO VIDEO — SLOW PLAYBACK + PAUSE WHEN TAB HIDDEN
      --------------------------------------------------------- */
   // The clip is short (~5s), so we slow it down to feel deliberate
   // and cinematic rather than looping quickly. Lower = slower.
@@ -610,6 +687,7 @@
      --------------------------------------------------------- */
   async function main() {
     applyWeddingData();
+    initBackgroundAudio();
     initSmoothScroll();
     initVideoPerf();
     initCountdown();
