@@ -90,22 +90,58 @@
   }
 
   /* ---------------------------------------------------------
-     2. LOADER
+     2. OPENING CURTAINS
      --------------------------------------------------------- */
-  function initLoader() {
+  function initStoryEntrance(startAudio) {
     return new Promise((resolve) => {
-      const loader = $('#loader');
-      const minDuration = prefersReducedMotion ? 200 : 1900;
+      const gate = $('#storyGate');
+      const openButton = $('#openInvitation');
+      const invitation = $('#invitationPage');
+      let opened = false;
 
-      const finish = () => {
-        if (!loader) return resolve();
-        loader.classList.add('is-hidden');
-        document.body.classList.remove('no-scroll');
-        setTimeout(resolve, prefersReducedMotion ? 0 : 700);
-      };
+      if (!gate || !openButton || !invitation) {
+        if (invitation) invitation.hidden = false;
+        document.body.classList.remove('no-scroll', 'story-closed');
+        resolve();
+        return;
+      }
 
       document.body.classList.add('no-scroll');
-      setTimeout(finish, minDuration);
+      openButton.focus({ preventScroll: true });
+
+      function openInvitation() {
+        if (opened) return;
+        opened = true;
+
+        // Keep play() inside this actual click/keyboard gesture, before any await
+        // or curtain animation, so mobile browsers can authorize the music.
+        startAudio();
+        openButton.disabled = true;
+        invitation.inert = true;
+        invitation.hidden = false;
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        gate.classList.add('is-opening');
+
+        setTimeout(() => {
+          gate.hidden = true;
+          invitation.inert = false;
+          document.body.classList.remove('no-scroll', 'story-closed');
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          const hero = $('#hero');
+          if (hero) hero.focus({ preventScroll: true });
+          resolve();
+        }, prefersReducedMotion ? 0 : 1600);
+      }
+
+      // Tapping anywhere on the curtain opens it; the button also supports
+      // Enter, Space, and assistive technology through native click behavior.
+      gate.addEventListener('click', openInvitation);
+      gate.addEventListener('keydown', (event) => {
+        if (event.key === 'Tab') {
+          event.preventDefault();
+          openButton.focus({ preventScroll: true });
+        }
+      });
     });
   }
 
@@ -148,7 +184,9 @@
       }
 
       // Handle ellipsis as a unit for pacing purposes, but type per character.
-      const chars = Array.from(text);
+      const chars = typeof Intl.Segmenter === 'function'
+        ? Array.from(new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(text), (part) => part.segment)
+        : Array.from(text);
       let i = 0;
 
       function step() {
@@ -219,14 +257,17 @@
     await wait(400);
     kicker && kicker.classList.add('is-in');
 
-    await wait(400);
-    names && names.classList.add('is-in');
-
-    await wait(600);
-    if (tw) await initTypewriterFor(tw);
+    await wait(650);
+    if (tw) {
+      tw.dataset.twDone = '1';
+      await typewrite(tw, tw.getAttribute('data-text') || '', { speed: 38, cursor: false });
+    }
 
     await wait(300);
     ayahSrc && ayahSrc.classList.add('is-in');
+
+    await wait(500);
+    names && names.classList.add('is-in');
 
     await wait(300);
     divider && divider.classList.add('is-in');
@@ -534,33 +575,38 @@
   }
 
   /* ---------------------------------------------------------
-     8. CONTINUOUS FALLING FLOWERS
+     8. CONTINUOUS BURGUNDY PETALS
      --------------------------------------------------------- */
   function initFlowers() {
     if (prefersReducedMotion) return;
     const isSmallScreen = window.innerWidth < 640;
-    const count = isSmallScreen ? 10 : 20;
-    const flowerSymbols = ['🌹', '🌸'];
+    const count = isSmallScreen ? 11 : 19;
 
-    const field = document.createElement('div');
-    field.className = 'flower-field';
-    field.setAttribute('aria-hidden', 'true');
+    function createField(className, petalCount) {
+      const field = document.createElement('div');
+      field.className = className;
+      field.setAttribute('aria-hidden', 'true');
 
-    for (let i = 0; i < count; i++) {
-      const flower = document.createElement('span');
-      const duration = 10 + Math.random() * 9;
-      flower.className = 'falling-flower';
-      flower.textContent = flowerSymbols[i % flowerSymbols.length];
-      flower.style.left = `${Math.random() * 100}%`;
-      flower.style.fontSize = `${15 + Math.random() * 13}px`;
-      flower.style.animationDuration = `${duration}s`;
-      flower.style.animationDelay = `${-Math.random() * duration}s`;
-      flower.style.setProperty('--flower-drift', `${-70 + Math.random() * 140}px`);
-      flower.style.setProperty('--flower-spin', Math.random() > .5 ? '360deg' : '-360deg');
-      field.appendChild(flower);
+      for (let i = 0; i < petalCount; i++) {
+        const petal = document.createElement('span');
+        const duration = 13 + Math.random() * 10;
+        petal.className = `falling-petal petal-variant-${i % 3}`;
+        petal.style.left = `${Math.random() * 100}%`;
+        petal.style.animationDuration = `${duration}s`;
+        petal.style.animationDelay = `${-Math.random() * duration}s`;
+        petal.style.setProperty('--petal-size', `${13 + Math.random() * 13}px`);
+        petal.style.setProperty('--petal-drift', `${-70 + Math.random() * 140}px`);
+        petal.style.setProperty('--petal-spin', Math.random() > .5 ? '280deg' : '-280deg');
+        petal.style.setProperty('--petal-tilt', `${Math.random() * 180}deg`);
+        field.appendChild(petal);
+      }
+
+      return field;
     }
 
-    document.body.appendChild(field);
+    document.body.appendChild(createField('flower-field', count));
+    const gate = $('#storyGate');
+    if (gate) gate.appendChild(createField('story-petals', isSmallScreen ? 8 : 13));
   }
 
   /* ---------------------------------------------------------
@@ -580,80 +626,28 @@
   }
 
   /* ---------------------------------------------------------
-     10. HIDDEN BACKGROUND MUSIC
+     10. BACKGROUND MUSIC — STARTED BY THE ENTRANCE GESTURE
      --------------------------------------------------------- */
   function initBackgroundAudio() {
     const audio = $('#backgroundAudio');
-    if (!audio) return;
+    if (!audio) return () => {};
 
     audio.loop = true;
     audio.volume = 0.72;
 
-    const interactionEvents = [
-      'pointerdown', 'pointerup',
-      'touchstart', 'touchend',
-      'click', 'keydown'
-    ];
-    let sectionRetryObserver = null;
-    let passiveRetryUsed = false;
-
-    function removeStartListeners() {
-      interactionEvents.forEach((eventName) => {
-        document.removeEventListener(eventName, tryStartAudio, true);
-      });
-      window.removeEventListener('scroll', tryPassiveStart, true);
-      document.removeEventListener('wheel', tryPassiveStart, true);
-      if (sectionRetryObserver) sectionRetryObserver.disconnect();
-    }
-
-    function tryStartAudio() {
-      if (!audio.paused) {
-        removeStartListeners();
-        return;
-      }
-
-      const playAttempt = audio.play();
-      if (playAttempt && typeof playAttempt.then === 'function') {
-        playAttempt.then(removeStartListeners).catch(() => {
-          // Browsers may require a real user gesture before allowing sound.
-        });
+    function startAudio() {
+      try {
+        const playAttempt = audio.play();
+        if (playAttempt && typeof playAttempt.catch === 'function') {
+          // An audio loading failure must not block opening the invitation.
+          playAttempt.catch(() => {});
+        }
+      } catch (error) {
+        // Keep the invitation usable if the browser cannot play the audio.
       }
     }
 
-    function tryPassiveStart() {
-      if (passiveRetryUsed) return;
-      passiveRetryUsed = true;
-      tryStartAudio();
-    }
-
-    interactionEvents.forEach((eventName) => {
-      document.addEventListener(eventName, tryStartAudio, {
-        capture: true,
-        passive: eventName !== 'keydown'
-      });
-    });
-
-    // A swipe ends with touchend/pointerup, which can unlock audio on mobile.
-    // Scroll and section visibility are also retried as a best effort, although
-    // browsers may still require a tap or another explicit user gesture.
-    window.addEventListener('scroll', tryPassiveStart, { capture: true, passive: true });
-    document.addEventListener('wheel', tryPassiveStart, { capture: true, passive: true });
-
-    if ('IntersectionObserver' in window) {
-      const retryTargets = [$('#invitation'), $('#couple')].filter(Boolean);
-      sectionRetryObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          tryStartAudio();
-          sectionRetryObserver.unobserve(entry.target);
-        });
-      }, { threshold: .3 });
-      retryTargets.forEach((target) => sectionRetryObserver.observe(target));
-    }
-
-    audio.addEventListener('play', removeStartListeners, { once: true });
-
-    tryStartAudio();
+    return startAudio;
   }
 
   /* ---------------------------------------------------------
@@ -687,15 +681,14 @@
      --------------------------------------------------------- */
   async function main() {
     applyWeddingData();
-    initBackgroundAudio();
+    const startAudio = initBackgroundAudio();
     initSmoothScroll();
     initVideoPerf();
     initCountdown();
     initGallery();
     initFlowers();
+    await initStoryEntrance(startAudio);
     initScrollReveals();
-
-    await initLoader();
     initHeroAnimations();
   }
 

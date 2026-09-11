@@ -12,28 +12,48 @@
 
 <link rel="stylesheet" href="script.css">
 </head>
-<body>
+<body class="no-scroll story-closed">
 
-<!-- ============ LOADER ============ -->
-<div class="loader" id="loader" aria-hidden="true">
-  <div class="loader-inner">
-    <span class="loader-line loader-line-top"></span>
-    <div class="loader-mark">
-      <span class="loader-letter">أ</span>
-      <span class="loader-cross">&times;</span>
-      <span class="loader-letter">م</span>
-    </div>
-    <span class="loader-line loader-line-bottom"></span>
+<!-- ============ OPENING CURTAINS ============ -->
+<section class="story-gate" id="storyGate" role="dialog" aria-modal="true"
+         aria-labelledby="storyTitle">
+  <div class="story-curtain story-curtain-left" aria-hidden="true"></div>
+  <div class="story-curtain story-curtain-right" aria-hidden="true"></div>
+  <div class="story-gate-glow" aria-hidden="true"></div>
+  <div class="story-gate-content">
+    <span class="story-rule" aria-hidden="true"></span>
+    <h2 id="storyTitle" class="story-title">لنبدأ الحكاية</h2>
+    <p class="story-subtitle">خلف هذه الستائر، تنتظركم حكايتنا</p>
+    <button class="story-open" id="openInvitation" type="button">
+      <span>افتح الدعوة</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+        <path d="M19 12H5m6-6-6 6 6 6"/>
+      </svg>
+    </button>
   </div>
-</div>
+  <span class="story-gate-footer" aria-hidden="true">بكلّ الحب، ننتظركم</span>
+</section>
+
+<noscript>
+  <style>
+    body.no-scroll{ overflow:auto; height:auto; }
+    body.story-closed{ background:var(--bg); }
+    #storyGate{ display:none; }
+    #invitationPage[hidden]{ display:block !important; }
+    .reveal,.hero-kicker,.hero-names .name-part,.hero-amp,.hero-ayah-source,.hero-cta{ opacity:1; transform:none; filter:none; }
+    .typewriter::before{ content:attr(data-text); white-space:pre-line; }
+  </style>
+</noscript>
+
+<div id="invitationPage" hidden>
 
 <!-- ============ NOISE / GRAIN OVERLAY ============ -->
 <div class="grain" aria-hidden="true"></div>
 
 <!-- ============ HERO ============ -->
-<header class="hero" id="hero">
+<header class="hero" id="hero" tabindex="-1" aria-label="دعوة خطوبة المهندس أيمن والمهندسة ماسة">
   <div class="hero-media">
-    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/videos/poster.jpg">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
       <source src="assets/videos/wedding-bg.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
@@ -45,16 +65,16 @@
 
     <p class="hero-kicker" id="heroKicker">بِسْمِ اللهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
 
+    <p class="hero-invite">
+      <span class="typewriter typewriter-block" id="heroTypewriter" data-text="وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"></span>
+    </p>
+    <p class="hero-ayah-source" id="heroAyahSource">سورة الروم</p>
+
     <h1 class="hero-names" id="heroNames">
       <span class="name-part" data-field="groom">المهندس أيمن</span>
       <span class="hero-amp">×</span>
       <span class="name-part" data-field="bride">المهندسة ماسة</span>
     </h1>
-
-    <p class="hero-invite">
-      <span class="typewriter typewriter-block" id="heroTypewriter" data-text="وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"></span>
-    </p>
-    <p class="hero-ayah-source" id="heroAyahSource">صدق الله العظيم — سورة الروم، الآية ٢١</p>
 
     <span class="hero-divider" id="heroDivider" aria-hidden="true"></span>
 
@@ -303,8 +323,9 @@
   </section>
 
 </main>
+</div>
 
-<audio id="backgroundAudio" autoplay loop preload="auto" hidden aria-hidden="true">
+<audio id="backgroundAudio" loop preload="auto" hidden aria-hidden="true">
   <source src="assets/audio/audio.m4a" type="audio/mp4">
 </audio>
 
