@@ -19,7 +19,7 @@
     venue: "كافيه ايليت بلازا",
     address: " دمشق - الميدان - ساحة الأشمر - خلف كازية المهايني ",
     mapsUrl: "https://maps.app.goo.gl/wzRsoxYNZk2EFQvQA",
-    whatsapp: "0949330851"
+    whatsapp: "00963949330851"
   };
 
   // Each caption is paired with the photo that has the same number.
