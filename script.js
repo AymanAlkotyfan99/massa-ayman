@@ -148,6 +148,27 @@
   /* ---------------------------------------------------------
      3. TYPEWRITER SYSTEM
      --------------------------------------------------------- */
+  function segmentTypingText(text) {
+    if (typeof Intl.Segmenter === 'function') {
+      return Array.from(
+        new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(text),
+        (part) => part.segment
+      );
+    }
+
+    // Older mobile browsers must reveal Arabic vowel marks with their letter.
+    const segments = [];
+    const arabicMark = /[\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7-\u06e8\u06ea-\u06ed]/;
+    for (const character of Array.from(text)) {
+      if (segments.length && arabicMark.test(character)) {
+        segments[segments.length - 1] += character;
+      } else {
+        segments.push(character);
+      }
+    }
+    return segments;
+  }
+
   function pauseForChar(ch, baseDelay) {
     if (ch === '،') return baseDelay + 180;
     if (ch === ',') return baseDelay + 180;
@@ -168,25 +189,25 @@
 
     return new Promise((resolve) => {
       el.textContent = '';
+      // Keep one text run so Safari can shape and order connected Arabic letters.
+      const textNode = document.createTextNode('');
+      el.appendChild(textNode);
       let cursorSpan = null;
 
       if (showCursor) {
         cursorSpan = document.createElement('span');
         cursorSpan.className = 'tw-cursor';
+        cursorSpan.setAttribute('aria-hidden', 'true');
         el.appendChild(cursorSpan);
       }
 
       if (prefersReducedMotion) {
-        el.textContent = text;
-        if (showCursor) el.appendChild(cursorSpan);
+        textNode.data = text;
         if (cursorSpan) cursorSpan.classList.add('tw-cursor-out');
         return resolve();
       }
 
-      // Handle ellipsis as a unit for pacing purposes, but type per character.
-      const chars = typeof Intl.Segmenter === 'function'
-        ? Array.from(new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(text), (part) => part.segment)
-        : Array.from(text);
+      const chars = segmentTypingText(text);
       let i = 0;
 
       function step() {
@@ -208,12 +229,7 @@
         }
 
         const ch = chars[i];
-        const textNode = document.createTextNode(ch === '\n' ? '\n' : ch);
-        if (cursorSpan) {
-          el.insertBefore(textNode, cursorSpan);
-        } else {
-          el.appendChild(textNode);
-        }
+        textNode.data += ch;
 
         i++;
         const delay = pauseForChar(ch, speed);
@@ -462,12 +478,7 @@
         return;
       }
 
-      const characters = typeof Intl.Segmenter === 'function'
-        ? Array.from(
-            new Intl.Segmenter('ar', { granularity: 'grapheme' }).segment(text),
-            (part) => part.segment
-          )
-        : Array.from(text);
+      const characters = segmentTypingText(text);
       let characterIndex = 0;
       caption.classList.add('is-typing');
 

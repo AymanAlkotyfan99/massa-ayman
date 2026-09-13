@@ -262,7 +262,7 @@ a{ color:inherit; text-decoration:none; }
 .hero-kicker{
   font-family:var(--font-serif);
   font-size:clamp(1rem, 2vw, 1.25rem);
-  letter-spacing:.06em;
+  letter-spacing:normal;
   color:var(--champagne);
   margin:0 0 1.1rem;
   opacity:0; transform:translateY(14px);
@@ -312,7 +312,7 @@ a{ color:inherit; text-decoration:none; }
 .hero-ayah-source{
   font-family:var(--font-ui);
   font-size:.78rem;
-  letter-spacing:.03em;
+  letter-spacing:normal;
   color:var(--muted-dim);
   margin:0 0 1.8rem;
   opacity:0;
@@ -424,6 +424,9 @@ a{ color:inherit; text-decoration:none; }
   position:relative;
   font-family:var(--font-serif);
   color:var(--muted);
+  direction:rtl;
+  unicode-bidi:isolate;
+  letter-spacing:normal;
   white-space:pre-wrap;
 }
 .typewriter-block{
@@ -616,7 +619,7 @@ a{ color:inherit; text-decoration:none; }
 }
 .detail-icon{ width:28px; height:28px; color:var(--gold); }
 .detail-label{
-  font-size:.82rem; color:var(--muted-dim); margin:0; letter-spacing:.02em;
+  font-size:.82rem; color:var(--muted-dim); margin:0; letter-spacing:normal;
 }
 .detail-value{
   font-family:var(--font-serif); font-size:1.05rem; color:var(--champagne); margin:0;
@@ -884,7 +887,7 @@ a{ color:inherit; text-decoration:none; }
 .final-names > span:not(.final-amp){ white-space:nowrap; }
 .final-amp{ color:var(--gold); font-family:var(--font-en); font-style:italic; font-size:.6em; }
 .final-date{
-  font-family:var(--font-ui); color:var(--muted-dim); letter-spacing:.04em; margin-bottom:2rem;
+  font-family:var(--font-ui); color:var(--muted-dim); letter-spacing:normal; margin-bottom:2rem;
 }
 .final-deco{
   display:block; width:1px; height:0; background:var(--gold);
